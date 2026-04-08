@@ -1,6 +1,0 @@
-DRPL Coba coba yang txt nya
-
-streamlit
-pandas
-matplotlib
-seaborn
