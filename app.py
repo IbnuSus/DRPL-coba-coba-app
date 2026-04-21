@@ -244,3 +244,48 @@ st.sidebar.write("Kamu juga bisa menaruh semua fitur interaktif tadi di sini aga
 tema_gelap = st.sidebar.checkbox("Aktifkan Tema Gelap (Hanya teks)")
 if tema_gelap:
     st.sidebar.write("Teks tema gelap aktif!")
+import streamlit as st
+import pandas as pd
+import plotly.express as px
+
+# 1. JUDUL DASHBOARD
+st.title("Simulator Diagram Lingkaran Interaktif")
+
+# 2. DATA SIMULASI (Bisa diganti dengan data dari CSV/JSON)
+# Di sini kita membuat DataFrame Pandas secara langsung
+data_awal = {
+    'Kategori': ['Makanan', 'Pakaian', 'Elektronik', 'Kesehatan', 'Lainnya'],
+    'Pengeluaran': [4000000, 2500000, 3500000, 1500000, 1000000]
+}
+df = pd.DataFrame(data_awal)
+
+# 3. KONTROL INTERAKTIF (Di Sidebar)
+st.sidebar.header("Pengaturan Diagram")
+
+# Input teks untuk judul diagram
+judul_diagram = st.sidebar.text_input("Judul Diagram:", "Persentase Pengeluaran Bulanan")
+
+# Checkbox untuk menampilkan/menyembunyikan label persentase
+tampilkan_persen = st.sidebar.checkbox("Tampilkan Persentase", value=True)
+
+# 4. MEMBUAT DIAGRAM LINGKARAN DENGAN PLOTLY
+# Menentukan teks label berdasarkan pilihan user
+label_info = 'percent+label' if tampilkan_persen else 'label'
+
+fig = px.pie(
+    df, 
+    values='Pengeluaran', 
+    names='Kategori', 
+    title=judul_diagram,
+    hole=0.3 # Membuat diagram donat (opsional)
+)
+
+# Mengatur tampilan label
+fig.update_traces(textposition='inside', textinfo=label_info)
+
+# 5. MENAMPILKAN DIAGRAM KE DASHBOARD
+st.plotly_chart(fig, use_container_width=True)
+
+# 6. MENAMPILKAN TABEL DATA MENTAH
+st.subheader("Data Mentah")
+st.dataframe(df)
